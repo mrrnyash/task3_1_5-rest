@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -9,35 +9,37 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="btn btn-primary" href="/logout" role="button">Выйти</a>
 </nav>
 
-
 <div class="container">
-    <p class="h3">Информация о пользователе <span th:text=" ${user.username}"></span></p>
-    <table class="table table-hover table-sm">
-        <thead>
-        <tr>
-            <th> id</th>
-            <th> Имя</th>
-            <th> Фамилия</th>
-            <th> Email</th>
-            <th> Username</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td><span th:text=" ${user.id}"> id </span></td>
-            <td><span th:text=" ${user.firstName}"> Имя </span></td>
-            <td><span th:text=" ${user.lastName}"> Фамилия </span></td>
-            <td><span th:text=" ${user.email}"> Email </span></td>
-            <td><span th:text=" ${user.username}"> Username </span></td>
-        </tr>
-        </tbody>
-    </table>
+    <p class="h3">Добавить пользователя</p>
+    <form th:method="POST" th:action="@{/new}" th:object="${user}">
+        <div class="form-group">
+            <label for="firstName">Имя:</label>
+            <input type="text" th:field="*{firstName}" class="form-control" id="firstName">
+        </div>
+        <div class="form-group">
+            <label for="lastName">Фамилия:</label>
+            <input type="text" th:field="*{lastName}" class="form-control" id="lastName">
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="text" th:field="*{email}" class="form-control" id="email">
+        </div>
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" th:field="*{username}" class="form-control" id="username">
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="text" th:field="*{password}" class="form-control" id="password">
+        </div>
+        <button type="submit" class="btn btn-default">Сохранить</button>
+    </form>
 </div>
+
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
