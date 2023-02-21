@@ -5,8 +5,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -18,12 +21,13 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Collection<Role> roles;
+    @NotEmpty(message = "Choose at least one role")
+    private List<Role> roles;
 
     @Column(name = "first_name")
     private String firstName;
@@ -32,21 +36,26 @@ public class User implements UserDetails {
     private String lastName;
 
     @Column(name = "email", unique = true)
+    @NotEmpty(message = "Email may not be empty")
+    @Email(message = "Email not valid")
     private String email;
 
     @Column(name = "username", unique = true)
-    @NotEmpty(message = "Name may not be empty")
+    @NotEmpty(message = "Username may not be empty")
+    @Size(min = 4, max = 30, message = "Username should be between 3 and 30 characters")
     private String username;
 
     @Column(name = "password")
-    @NotEmpty(message = "Name may not be empty")
+    @NotEmpty(message = "Password may not be empty")
+    @Size(min = 6, message = "Password should be at least 6 characters long")
     private String password;
 
 
     public User() {
     }
 
-    public User(Collection<Role> roles, String firstName, String lastName, String email, String username, String password) {
+    public User(List<Role> roles, String firstName, String lastName, String email, String username, String password) {
+        super();
         this.roles = roles;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -87,11 +96,11 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public Collection<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Collection<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 
@@ -104,6 +113,7 @@ public class User implements UserDetails {
         return roles.stream().map(r -> new SimpleGrantedAuthority(r.getAuthority())).collect(Collectors.toList());
     }
 
+    @Override
     public String getPassword() {
         return password;
     }

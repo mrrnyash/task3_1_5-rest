@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -9,14 +8,22 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <<a class="btn btn-primary" href="/logout" role="button">Выйти</a>
-</nav>
+<div class="container">
+    <nav class="navbar navbar-light bg-light">
+        <div th:if="!${#request.userPrincipal}">
+            <a class="btn btn-primary" href="/login" role="button">Войти</a>
+        </div>
+        <div th:if="${#request.userPrincipal}">
+            <a class="btn btn-link" href="/user" role="button" th:text="${#request.userPrincipal.getName()}">Link</a>
+            <a class="btn btn-primary" href="/logout" role="button">Выйти</a>
+        </div>
+    </nav>
+</div>
 
 <div class="container">
     <p class="h3">Изменить данные пользователя</p>
 
-    <form th:method="PATCH" th:action="@{/{id}(id=${user.getId()})}" th:object="${user}">
+    <form th:method="PATCH" th:action="@{/admin/edit/{id}(id=${user.id})}" th:object="${user}">
         <div class="form-group">
             <label for="name">Имя:</label>
             <input type="text" th:field="*{firstName}" class="form-control" id="name">
@@ -28,6 +35,39 @@
         <div class="form-group">
             <label for="email">Email:</label>
             <input type="text" th:field="*{email}" class="form-control" id="email">
+            <br>
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+                Email error
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" th:field="*{username}" class="form-control" id="username">
+            <br>
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">
+                Username error
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" th:field="*{password}" class="form-control" id="password">
+            <br>
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
+                Password error
+            </div>
+        </div>
+        <p>
+            <label>Roles:
+                <input type="checkbox" name="roles"
+                       th:each="role : ${roles}"
+                       th:text="${role.authority}"
+                       th:value="${role.id}"
+                       th:field="*{roles}"
+                />
+            </label>
+        </p>
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">
+            Roles error
         </div>
         <button type="submit" class="btn btn-default">Сохранить</button>
     </form>

@@ -9,9 +9,17 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="btn btn-primary" href="/logout" role="button">Выйти</a>
-</nav>
+<div class="container">
+    <nav class="navbar navbar-light bg-light">
+        <div th:if="!${#request.userPrincipal}">
+            <a class="btn btn-primary" href="/login" role="button">Войти</a>
+        </div>
+        <div th:if="${#request.userPrincipal}">
+            <a class="btn btn-link" href="/user" role="button" th:text="${#request.userPrincipal.getName()}">Link</a>
+            <a class="btn btn-primary" href="/logout" role="button">Выйти</a>
+        </div>
+    </nav>
+</div>
 <div class="container">
     <table class="table table-hover table-sm">
         <thead>
@@ -20,6 +28,8 @@
             <th> Имя</th>
             <th> Фамилия</th>
             <th> Email</th>
+            <th> Username</th>
+            <th> Роли</th>
             <th> Действия</th>
         </tr>
         </thead>
@@ -32,9 +42,11 @@
             <td><span th:text=" ${user.firstName}"> Имя </span></td>
             <td><span th:text=" ${user.lastName}"> Фамилия </span></td>
             <td><span th:text=" ${user.email}"> Email </span></td>
+            <td><span th:text=" ${user.username}"> Username </span></td>
+            <td><span th:text=" ${user.getRoles()}"> Роли </span></td>
             <td><span>
-                <a class="btn btn-link" th:href="@{/{id}/edit(id=${user.id})}" role="button"> Изменить </a>
-                <form th:method="DELETE" th:action="@{/{id}(id=${user.id})}">
+                <a class="btn btn-link" th:href="@{/admin/edit/{id}(id=${user.id})}" role="button"> Изменить </a>
+                <form th:method="DELETE" th:action="@{/admin/{id}(id=${user.id})}">
                     <button type="submit" class="btn btn-link"> Удалить</button>
                 </form>
 
@@ -47,7 +59,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm">
-                <a class="btn btn-primary" href="/new" role="button">Добавить пользователя</a>
+                <a class="btn btn-primary" href="/admin/new" role="button">Добавить пользователя</a>
             </div>
         </div>
     </div>

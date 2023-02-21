@@ -13,12 +13,12 @@ import java.util.List;
 
 
 @Service
-public class CustomUserDetailService implements UserDetailsService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
-
+    
     @Autowired
-    public CustomUserDetailService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -38,8 +38,11 @@ public class CustomUserDetailService implements UserDetailsService {
 
 
     public void deleteById(Long id) {
-
         userRepository.deleteById(id);
+    }
+
+    public void update(Long id, User user) {
+        userRepository.save(user);
     }
 
 
@@ -57,5 +60,6 @@ public class CustomUserDetailService implements UserDetailsService {
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthorities());
     }
+
 
 }

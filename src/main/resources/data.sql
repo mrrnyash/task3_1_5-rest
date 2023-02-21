@@ -14,7 +14,7 @@ VALUES ('admin', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW',
 -- admin.role == ROLE_ADMIN
 -- user.role == ROLE_USER
 INSERT INTO user_role (user_id, role_id)
-VALUES (1, 1), -- These id's values will be only if database was created initially
+VALUES (1, 1), -- These id values' will be only if database was created initially
        (1, 2),
        (2, 2);
 
@@ -22,15 +22,14 @@ VALUES (1, 1), -- These id's values will be only if database was created initial
 -- add other users for test
 -- passwords still the same ("password")
 INSERT INTO user (first_name, last_name, username, password, email)
-VALUES ('John', 'Doe', 'user1', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 'user1@mail.ru'),
-       ('Brandon', 'Hunt', 'user2', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 'user2@mail.ru'),
-       ('Cassandra', 'Fox', 'user3', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW',
+VALUES ('Иван', 'Иванов', 'user1', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 'user1@mail.ru'),
+       ('Николай', 'Сидоров', 'user2', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 'user2@mail.ru'),
+       ('Мария', 'Сергеева', 'user3', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW',
         'user3@mail.ru'),
        ('Charlene', 'Austin', 'user4', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 'user4@mail.ru'),
        ('Terrence', 'Hicks', 'user5', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 'user5@mail.ru'),
        ('Alexa', 'Lawson', 'user6', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 'user6@mail.ru'),
-       ('Aaron', 'Lee', 'user7', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 'user7@mail.ru'),
-       ('Aubrey', 'Turner', 'user8', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 'user8@mail.ru');
+       ('Aaron', 'Lee', 'user7', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 'user7@mail.ru');
 
 
 -- give roles to these users
@@ -43,5 +42,4 @@ VALUES (3, 1),
        (7, 2),
        (8, 1),
        (8, 2),
-       (9, 2),
-       (10, 2);
+       (9, 2);
