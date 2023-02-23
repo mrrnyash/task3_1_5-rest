@@ -3,56 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Spring App</title>
     <link rel="stylesheet" th:href="@{/bootstrap.min.css}">
     <script th:src="@{/bootstrap.bundle.min.js}"></script>
 </head>
 <body>
-<div th:replace="fragments/topnav :: navbar"></div>
-<div class="container">
-    <table class="table table-hover table-sm">
-        <thead>
-        <tr>
-            <th> id</th>
-            <th> Имя</th>
-            <th> Фамилия</th>
-            <th> Email</th>
-            <th> Username</th>
-            <th> Роли</th>
-            <th> Действия</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:if="${#lists.isEmpty(users)}">
-            <td colspan="3"> Список пользователей пуст</td>
-        </tr>
-        <tr th:each="user: ${users}">
-            <td><span th:text=" ${user.id}"> id </span></td>
-            <td><span th:text=" ${user.firstName}"> Имя </span></td>
-            <td><span th:text=" ${user.lastName}"> Фамилия </span></td>
-            <td><span th:text=" ${user.email}"> Email </span></td>
-            <td><span th:text=" ${user.username}"> Username </span></td>
-            <td><span th:text=" ${user.getRoles()}"> Роли </span></td>
-            <td><span>
-                <a class="btn btn-link" th:href="@{/admin/edit/{id}(id=${user.id})}" role="button"> Изменить </a>
-                <form th:method="DELETE" th:action="@{/admin/{id}(id=${user.id})}">
-                    <button type="submit" class="btn btn-link"> Удалить</button>
-                </form>
-
-            </span>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
-    <div class="container">
+<div th:insert="fragments/topnav :: navbar"></div>
+<section>
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-sm">
-                <a class="btn btn-primary" href="/admin/new" role="button">Добавить пользователя</a>
+            <div class="col-2 p-0 mt-2">
+                <!--        Sidebar-->
+                <div th:replace="fragments/sidebar_left :: sidebarLeft"></div>
             </div>
+
+            <!--        Users-->
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4 bg-light hmax min-vh-100">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 ">
+                    <h1>Admin panel</h1>
+                </div>
+
+                <!--        Tabs-->
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Users table</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/new">New User</a>
+                    </li>
+                </ul>
+
+                <!--                Card (panel)-->
+                <div class="card">
+                    <div class="card-header">
+                        <h4>
+                            All users
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th> id</th>
+                                <th> Name</th>
+                                <th> Last Name</th>
+                                <th> Email</th>
+                                <th> Username</th>
+                                <th> Role</th>
+                                <th> Edit</th>
+                                <th> Delete</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:if="${#lists.isEmpty(users)}">
+                                <td colspan="3"> Список пользователей пуст</td>
+                            </tr>
+                            <tr th:each="user: ${users}">
+                                <td><span th:text=" ${user.id}"> id </span></td>
+                                <td><span th:text=" ${user.firstName}"> Name </span></td>
+                                <td><span th:text=" ${user.lastName}"> Last Name </span></td>
+                                <td><span th:text=" ${user.email}"> Email </span></td>
+                                <td><span th:text=" ${user.username}"> Username </span></td>
+                                <td><span th:text=" ${user.getRoles()}"> Role </span></td>
+                                <td><span>
+                                    <a class="btn btn-info" th:href="@{/admin/edit/{id}(id=${user.id})}"
+                                       role="button" data-bs-toggle="modal" data-bs-target="#editModal"> Edit</a>
+
+                                </span>
+                                </td>
+                                <td>
+                                    <form th:method="DELETE" th:action="@{/admin/{id}(id=${user.id})}">
+                                        <button type="submit" class="btn btn-danger"> Delete</button>
+                                    </form>
+                                </td>
+                                <!--Modal-->
+                                <div th:insert="fragments/edit_modal :: editModal (user)"></div>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </main>
         </div>
     </div>
-</div>
+</section>
 
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
 </body>
 </html>

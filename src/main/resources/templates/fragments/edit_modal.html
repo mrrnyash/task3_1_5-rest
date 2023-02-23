@@ -1,0 +1,69 @@
+<div th:fragment="editModal(user)">
+    <div class="modal fade" tabindex="-1" id="editModal" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit user</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+                </div>
+                <div class="modal-body">
+                    <form th:method="PATCH" th:action="@{/admin/edit/{id}(id=${user.id})}" th:object="${user}">
+                        <div class="form-group">
+                            <label for="name">First Name:</label>
+                            <input type="text" th:field="*{firstName}" class="form-control" id="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name:</label>
+                            <input type="text" th:field="*{lastName}" class="form-control" id="lastName">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="text" th:field="*{email}" class="form-control" id="email">
+                            <br>
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+                                Email error
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="username">Username:</label>
+                            <input type="text" th:field="*{username}" class="form-control" id="username">
+                            <br>
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('username')}"
+                                 th:errors="*{username}">
+                                Username error
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" th:field="*{password}" class="form-control" id="password">
+                            <br>
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('password')}"
+                                 th:errors="*{password}">
+                                Password error
+                            </div>
+                        </div>
+                        <p>
+
+                            <label>Role:
+                                <input type="checkbox" name="roles"
+                                       th:each="role : ${roles}"
+                                       th:text="${role.authority}"
+                                       th:value="${role.id}"
+                                       th:field="*{roles}"
+                                />
+                            </label>
+                        </p>
+                        <div class="alert alert-danger" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">
+                            Roles error
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Edit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

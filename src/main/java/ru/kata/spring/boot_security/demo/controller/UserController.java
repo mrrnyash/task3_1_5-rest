@@ -39,7 +39,7 @@ public class UserController {
 
     @GetMapping("/")
     public String home() {
-        return "index";
+        return "login";
     }
 
     @GetMapping("/user")
