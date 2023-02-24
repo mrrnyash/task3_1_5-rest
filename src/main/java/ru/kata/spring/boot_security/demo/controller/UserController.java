@@ -42,6 +42,11 @@ public class UserController {
         return "login";
     }
 
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
     @GetMapping("/user")
     public String user(ModelMap model, Principal principal) {
         User user = userService.getUserByUsername(principal.getName());
@@ -62,7 +67,7 @@ public class UserController {
         List<Role> roles = roleRepository.findAll();
         model.addAttribute("user", user);
         model.addAttribute("roles", roles);
-        return "new";
+        return "admin";
     }
 
     @PostMapping("/admin/new")
@@ -70,7 +75,7 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             List<Role> roles = roleRepository.findAll();
             model.addAttribute("roles", roles);
-            return "new";
+            return "admin";
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.save(user);
@@ -90,7 +95,7 @@ public class UserController {
         User user = userService.getById(id);
         model.addAttribute("user", user);
         model.addAttribute("roles", roleRepository.findAll());
-        return "edit";
+        return "admin";
     }
 
     @PatchMapping("/admin/edit/{id}")
@@ -99,7 +104,7 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             List<Role> roles = roleRepository.findAll();
             model.addAttribute("roles", roles);
-            return "edit";
+            return "admin";
         }
         userService.update(id, user);
         return "redirect:/admin";

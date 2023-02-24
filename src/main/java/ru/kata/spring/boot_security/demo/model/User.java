@@ -21,6 +21,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_role",
@@ -34,6 +35,10 @@ public class User implements UserDetails {
 
     @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "age")
+    @Size(min = 1, max = 120, message = "Incorrect age")
+    private Byte age;
 
     @Column(name = "email", unique = true)
     @NotEmpty(message = "Email may not be empty")
@@ -54,11 +59,11 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(List<Role> roles, String firstName, String lastName, String email, String username, String password) {
-        super();
+    public User(List<Role> roles, String firstName, String lastName, Byte age, String email, String username, String password) {
         this.roles = roles;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.age = age;
         this.email = email;
         this.username = username;
         this.password = password;
@@ -86,6 +91,14 @@ public class User implements UserDetails {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Byte getAge() {
+        return age;
+    }
+
+    public void setAge(byte age) {
+        this.age = age;
     }
 
     public String getEmail() {

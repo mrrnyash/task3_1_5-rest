@@ -21,15 +21,19 @@ VALUES (1, 1), -- These id values' will be only if database was created initiall
 
 -- add other users for test
 -- passwords still the same ("password")
-INSERT INTO user (first_name, last_name, username, password, email)
-VALUES ('Иван', 'Иванов', 'user1', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 'user1@mail.ru'),
-       ('Николай', 'Сидоров', 'user2', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 'user2@mail.ru'),
-       ('Мария', 'Сергеева', 'user3', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW',
+INSERT INTO user (first_name, last_name, age, username, password, email)
+VALUES ('Иван', 'Иванов', 25, 'user1', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 'user1@mail.ru'),
+       ('Николай', 'Сидоров', 19, 'user2', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW',
+        'user2@mail.ru'),
+       ('Мария', 'Сергеева', 31, 'user3', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW',
         'user3@mail.ru'),
-       ('Charlene', 'Austin', 'user4', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 'user4@mail.ru'),
-       ('Terrence', 'Hicks', 'user5', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 'user5@mail.ru'),
-       ('Alexa', 'Lawson', 'user6', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 'user6@mail.ru'),
-       ('Aaron', 'Lee', 'user7', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 'user7@mail.ru');
+       ('Charlene', 'Austin', 42, 'user4', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW',
+        'user4@mail.ru'),
+       ('Terrence', 'Hicks', 36, 'user5', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW',
+        'user5@mail.ru'),
+       ('Alexa', 'Lawson', 45, 'user6', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW',
+        'user6@mail.ru'),
+       ('Aaron', 'Lee', 55, 'user7', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 'user7@mail.ru');
 
 
 -- give roles to these users
