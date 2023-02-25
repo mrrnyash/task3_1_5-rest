@@ -1,6 +1,8 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -14,6 +16,7 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class UserController {
@@ -56,8 +59,13 @@ public class UserController {
 
     @GetMapping(value = "/admin")
     public String home(ModelMap model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        List<String> currentUserRoles = authentication.getAuthorities().stream()
+                .map(r -> r.getAuthority()).collect(Collectors.toList());
         List<User> users = userService.listAll();
         model.addAttribute("users", users);
+        model.addAttribute("currentUserRoles", currentUserRoles);
         return "admin";
     }
 
