@@ -37,7 +37,7 @@ public class User implements UserDetails {
     private String lastName;
 
     @Column(name = "age")
-    @Size(min = 1, max = 120, message = "Incorrect age")
+    @Size(max = 120, message = "Incorrect age")
     private Byte age;
 
     @Column(name = "email", unique = true)

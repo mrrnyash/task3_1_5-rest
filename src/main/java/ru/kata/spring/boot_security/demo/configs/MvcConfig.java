@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
+
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/user").setViewName("user");
     }
@@ -27,4 +28,6 @@ public class MvcConfig implements WebMvcConfigurer {
         dataSourceInitializer.setDatabasePopulator(resourceDatabasePopulator);
         return dataSourceInitializer;
     }
+
+    
 }

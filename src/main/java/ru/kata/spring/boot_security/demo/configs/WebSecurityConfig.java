@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 
@@ -39,8 +40,12 @@ WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordParameter("password")
                 .permitAll()
                 .and()
-                .logout().logoutSuccessUrl("/")
-                .permitAll();
+                .logout()
+                .permitAll()
+                .logoutRequestMatcher((new AntPathRequestMatcher("/logout")))
+                .logoutSuccessUrl("/login")
+                .and().csrf().disable();
+        ;
     }
 
 

@@ -2,7 +2,9 @@ package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -19,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-public class UserController {
+public class MainController {
 
     private UserService userService;
     private RoleRepository roleRepository;
@@ -36,13 +38,13 @@ public class UserController {
     }
 
     @Autowired
-    public UserController(PasswordEncoder passwordEncoder) {
+    public MainController(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/")
     public String home() {
-        return "login";
+        return "redirect:/login";
     }
 
     @GetMapping("/login")
@@ -52,19 +54,32 @@ public class UserController {
 
     @GetMapping("/user")
     public String user(ModelMap model, Principal principal) {
-        User user = userService.getUserByUsername(principal.getName());
-        model.addAttribute("user", user);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User currentUser = userService.getUserByEmail(userDetails.getUsername());
+        List<String> currentUserRoles = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .map(s -> s.replace("ROLE_", ""))
+                .collect(Collectors.toList());
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentUserRoles", currentUserRoles);
         return "user";
     }
 
     @GetMapping(value = "/admin")
-    public String home(ModelMap model) {
+    public String home(ModelMap model, @ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
+        List<Role> roles = roleRepository.findAll();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         List<String> currentUserRoles = authentication.getAuthorities().stream()
-                .map(r -> r.getAuthority()).collect(Collectors.toList());
+                .map(GrantedAuthority::getAuthority)
+                .map(s -> s.replace("ROLE_", ""))
+                .collect(Collectors.toList());
+        if (bindingResult.hasErrors()) {
+            return "admin";
+        }
         List<User> users = userService.listAll();
         model.addAttribute("users", users);
+        model.addAttribute("roles", roles);
         model.addAttribute("currentUserRoles", currentUserRoles);
         return "admin";
     }
@@ -88,13 +103,6 @@ public class UserController {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.save(user);
         return "redirect:/admin";
-    }
-
-
-    @GetMapping("/user/{id}")
-    public String show(@PathVariable("id") Long id, ModelMap model) {
-        model.addAttribute("user", userService.getById(id));
-        return "user";
     }
 
 
