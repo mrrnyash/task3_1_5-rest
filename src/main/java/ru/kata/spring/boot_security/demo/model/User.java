@@ -46,7 +46,6 @@ public class User implements UserDetails {
     private String email;
 
     @Column(name = "username", unique = true)
-    @NotEmpty(message = "Username may not be empty")
     @Size(min = 4, max = 30, message = "Username should be between 3 and 30 characters")
     private String username;
 
@@ -158,5 +157,19 @@ public class User implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", roles=" + roles +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }

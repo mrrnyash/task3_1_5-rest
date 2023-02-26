@@ -93,8 +93,8 @@
                                 <td><span th:text=" ${currentUser.lastName}"> Last Name </span></td>
                                 <td><span th:text="${currentUser.age}"> Age </span></td>
                                 <td><span th:text=" ${currentUser.email}"> Email </span></td>
-                                <td><span th:each="role : ${currentUser.getRoles()}"
-                                          th:text=" ${role}"> Role </span></td>
+                                <td><span th:each="role : ${currentUser.getRoles()}">
+                                            <span th:text="${role}"> Role</span> </span></td>
                             </tr>
                             </tbody>
                         </table>
