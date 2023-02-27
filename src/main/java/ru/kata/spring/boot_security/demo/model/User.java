@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Collection;
@@ -37,7 +38,7 @@ public class User implements UserDetails {
     private String lastName;
 
     @Column(name = "age")
-    @Size(max = 120, message = "Incorrect age")
+    @Min(value = 0, message = "Incorrect age")
     private Byte age;
 
     @Column(name = "email", unique = true)

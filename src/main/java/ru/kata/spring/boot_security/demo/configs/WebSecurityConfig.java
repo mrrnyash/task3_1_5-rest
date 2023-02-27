@@ -9,18 +9,18 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import ru.kata.spring.boot_security.demo.service.UserService;
+import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
 
 @EnableWebSecurity
 public class
 WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final SuccessUserHandler successUserHandler;
-    private UserService userDetailService;
+    private UserServiceImpl userDetailService;
 
     @Autowired
-    public void setUserService(UserService userService) {
-        this.userDetailService = userService;
+    public void setUserService(UserServiceImpl userServiceImpl) {
+        this.userDetailService = userServiceImpl;
     }
 
     public WebSecurityConfig(SuccessUserHandler successUserHandler) {
@@ -45,7 +45,6 @@ WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutRequestMatcher((new AntPathRequestMatcher("/logout")))
                 .logoutSuccessUrl("/login")
                 .and().csrf().disable();
-        ;
     }
 
 

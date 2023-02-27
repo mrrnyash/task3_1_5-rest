@@ -1,33 +1,26 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
-import ru.kata.spring.boot_security.demo.service.UserService;
+import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
 import java.security.Principal;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class MainController {
 
-    private UserService userService;
+    private UserServiceImpl userService;
     private RoleRepository roleRepository;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
+    public void setUserService(UserServiceImpl userServiceImpl) {
+        this.userService = userServiceImpl;
     }
 
     @Autowired
@@ -52,30 +45,21 @@ public class MainController {
 
     @GetMapping("/user")
     public String user(ModelMap model, Principal principal) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User currentUser = userService.getUserByEmail(userDetails.getUsername());
-        List<String> currentUserRoles = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .map(s -> s.replace("ROLE_", ""))
-                .collect(Collectors.toList());
-        model.addAttribute("currentUser", currentUser);
-        model.addAttribute("currentUserRoles", currentUserRoles);
+
+        User authenticatedUser = userService.getUserByEmail(principal.getName());
+        model.addAttribute("authenticatedUser", authenticatedUser);
+        model.addAttribute("authenticatedUserRoles", authenticatedUser.getRoles());
+
         return "user";
     }
 
     @GetMapping("/admin")
-    public String admin(ModelMap model, Principal principal) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        List<String> currentUserRoles = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .map(s -> s.replace("ROLE_", ""))
-                .collect(Collectors.toList());
-        model.addAttribute("currentUser", userService.getUserByEmail(userDetails.getUsername()));
-        model.addAttribute("currentUserRoles", currentUserRoles);
+    public String admin(ModelMap model, @ModelAttribute("newUser") User newUser,
+                        Principal principal) {
+        User authenticatedUser = userService.getUserByEmail(principal.getName());
+        model.addAttribute("authenticatedUser", authenticatedUser);
+        model.addAttribute("authenticatedUserRoles", authenticatedUser.getRoles());
         model.addAttribute("users", userService.listAll());
-        model.addAttribute("newUser", new User());
         model.addAttribute("roles", roleRepository.findAll());
 
         return "admin";
@@ -84,13 +68,7 @@ public class MainController {
     // New user
     @PostMapping("/admin")
     public String create(@ModelAttribute("user") User newUser) {
-        List<Role> roles = roleRepository.findAll();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<String> currentUserRoles = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .map(s -> s.replace("ROLE_", ""))
-                .collect(Collectors.toList());
-
+        // Encrypt password
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         userService.save(newUser);
         return "redirect:/admin";
@@ -98,28 +76,9 @@ public class MainController {
 
 
     // Edit user
-    @PatchMapping("/admin/{id}")
-    public String update(ModelMap model, @ModelAttribute("user") User editedUser,
-                         @PathVariable("id") Long id) {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<String> currentUserRoles = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .map(s -> s.replace("ROLE_", ""))
-                .collect(Collectors.toList());
-
-
-        model.addAttribute("currentUserRoles", currentUserRoles);
-
-        User currentUpdatedUser = userService.getById(id);
-        currentUpdatedUser.setFirstName(editedUser.getEmail());
-        currentUpdatedUser.setLastName(editedUser.getLastName());
-        currentUpdatedUser.setAge(editedUser.getAge());
-        currentUpdatedUser.setEmail(editedUser.getEmail());
-        currentUpdatedUser.setPassword(passwordEncoder.encode(editedUser.getPassword()));
-        currentUpdatedUser.setRoles(editedUser.getRoles());
-
-        userService.update(id, currentUpdatedUser);
+    @PatchMapping("/admin/edit")
+    public String update(@ModelAttribute("editedUser") User editedUser) {
+        userService.update(editedUser);
         return "redirect:/admin";
     }
 

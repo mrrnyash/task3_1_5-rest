@@ -53,10 +53,12 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String toString() {
-        String str = this.getAuthority();
-        return str.replace("ROLE_", "");
+        return "Role{" +
+                "id=" + id +
+                ", authority='" + authority + '\'' +
+                '}';
     }
-
+    
 
     @Override
     public int hashCode() {
@@ -79,14 +81,11 @@ public class Role implements GrantedAuthority {
         }
         Role other = (Role) obj;
         if (id == null) {
-            {
-                if (other.id != null) {
-                    return false;
-                }
-            }
+            return other.id == null;
+        } else if (authority.equals(other.authority)) {
+            return true;
         } else {
             return id.equals(other.id);
         }
-        return true;
     }
 }
