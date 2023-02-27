@@ -83,7 +83,7 @@ public class MainController {
 
     // New user
     @PostMapping("/admin")
-    public String create(@ModelAttribute("user") User user) {
+    public String create(@ModelAttribute("user") User newUser) {
         List<Role> roles = roleRepository.findAll();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         List<String> currentUserRoles = authentication.getAuthorities().stream()
@@ -91,15 +91,15 @@ public class MainController {
                 .map(s -> s.replace("ROLE_", ""))
                 .collect(Collectors.toList());
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userService.save(user);
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        userService.save(newUser);
         return "redirect:/admin";
     }
 
 
     // Edit user
     @PatchMapping("/admin/{id}")
-    public String update(ModelMap model, @ModelAttribute("user") User updatedUser,
+    public String update(ModelMap model, @ModelAttribute("user") User editedUser,
                          @PathVariable("id") Long id) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -112,12 +112,12 @@ public class MainController {
         model.addAttribute("currentUserRoles", currentUserRoles);
 
         User currentUpdatedUser = userService.getById(id);
-        currentUpdatedUser.setFirstName(updatedUser.getEmail());
-        currentUpdatedUser.setLastName(updatedUser.getLastName());
-        currentUpdatedUser.setAge(updatedUser.getAge());
-        currentUpdatedUser.setEmail(updatedUser.getEmail());
-        currentUpdatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
-        currentUpdatedUser.setRoles(updatedUser.getRoles());
+        currentUpdatedUser.setFirstName(editedUser.getEmail());
+        currentUpdatedUser.setLastName(editedUser.getLastName());
+        currentUpdatedUser.setAge(editedUser.getAge());
+        currentUpdatedUser.setEmail(editedUser.getEmail());
+        currentUpdatedUser.setPassword(passwordEncoder.encode(editedUser.getPassword()));
+        currentUpdatedUser.setRoles(editedUser.getRoles());
 
         userService.update(id, currentUpdatedUser);
         return "redirect:/admin";
