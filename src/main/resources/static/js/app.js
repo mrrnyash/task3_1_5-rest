@@ -1,6 +1,18 @@
-// ---------------------------------------------  Admin ---------------------------------------------  //
+// Get all users for table
+async function fillUsersTable() {
+    const allUsersTable = document.getElementById('allUsersTable')
+    console.warn('Start "listUsersTable" function')
 
-// ---------------------------------------------- Get Users Table --------------------------------------------- //
-$.ajax("/api/users")
+    $('#allUsersTable').empty();
+
+    const response = await fetch('/users', {
+        method: "GET",
+        headers: {"Accept": "application/json"}
+    });
+    
+}
+
+
+
 
 
