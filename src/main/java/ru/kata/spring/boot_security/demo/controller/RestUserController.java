@@ -3,11 +3,13 @@ package ru.kata.spring.boot_security.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.exceptionhandling.NoSuchUserException;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -15,10 +17,12 @@ import java.util.List;
 public class RestUserController {
 
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public RestUserController(UserService userService) {
+    public RestUserController(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/users")
@@ -38,12 +42,14 @@ public class RestUserController {
 
     @PostMapping("/users")
     public ResponseEntity<User> addNewUser(@RequestBody User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.save(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PutMapping("/users")
     public ResponseEntity<User> updateUser(@RequestBody User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.update(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -57,5 +63,11 @@ public class RestUserController {
         }
         userService.deleteById(id);
         return new ResponseEntity<>("User with ID = " + id + " was deleted", HttpStatus.OK);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<User> getAuthenticatedUser(Principal principal) {
+        User user = userService.getUserByEmail(principal.getName());
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 }
