@@ -133,6 +133,10 @@
                                 <div class="text-center d-flex justify-content-center">
                                     <form id="newUserForm">
                                         <div class="form-group mb-2">
+                                            <input type="hidden" name="id" class="form-control"
+                                                   id="newUserId" value="-1"/>
+                                        </div>
+                                        <div class="form-group mb-2">
                                             <label for="newUserFirstNameField" class="form-label fw-bold">First
                                                 name</label>
                                             <input type="text" name="firstName" class="form-control"
@@ -170,7 +174,7 @@
                                         <p>
                                             <label class="form-label fw-bold">Role</label>
                                             <select id="newUserRoles" class="form-select col-md-5"
-                                                    name="roles" multiple="" size="2">
+                                                    name="roles" multiple="" size="2" required>
                                                 <option value="1">ADMIN</option>
                                                 <option value="2">USER</option>
                                             </select>
@@ -257,12 +261,12 @@
                             <input type="password"
                                    name="password"
                                    class="form-control" id="editModalPassword"
-                                   minlength="5"
+                                   minlength="3"
                                    required/>
                         </div>
                         <label class="form-label fw-bold">Role</label>
                         <select id="editModalRoles" class="form-select col-md-5"
-                                name="roles" multiple size="2">
+                                name="roles" multiple size="2" required>
                             <option value="1">ADMIN</option>
                             <option value="2">USER</option>
                         </select>
@@ -344,11 +348,14 @@
                                    id="deleteModalEmail" readonly/>
                         </div>
                         <label class="form-label fw-bold">Role</label>
-                        <select id="deleteModalRoles" class="form-select col-md-5"
-                                name="roles" multiple="" size="2" disabled>
-                            <option value="1">ADMIN</option>
-                            <option value="2">USER</option>
-                        </select>
+                        <input type="text" name="roles"
+                               class="form-control" id="deleteModalRoles" readonly/>
+                        <!--                        <select id="deleteModalRoles" class="form-select col-md-5"-->
+                        <!--                                name="roles" multiple size="2" disabled>-->
+
+                        <!--                            <option value="1">ADMIN</option>-->
+                        <!--                            <option value="2">USER</option>-->
+                        <!--                        </select>-->
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" id="deleteModalCloseButton"
                                     data-bs-dismiss="modal">Close

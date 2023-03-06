@@ -108,6 +108,20 @@ function editUser() {
 }
 
 // User Deletion
+async function openDeleteModal(id) {
+    const modal = new bootstrap.Modal(document.querySelector('#deleteModal'))
+    await fillModalForm(deleteModalForm, modal, id)
+    switch (deleteModalForm.roles.value) {
+        case '1':
+            deleteModalForm.roles.value = 'ADMIN'
+            break
+        case '2':
+            deleteModalForm.roles.value = 'USER'
+            break
+
+    }
+}
+
 function deleteUser() {
     deleteModalForm.addEventListener("submit", event => {
         event.preventDefault()
@@ -121,19 +135,6 @@ function deleteUser() {
             fillUsersTable()
         })
     })
-}
-
-async function openDeleteModal(id) {
-    const modal = new bootstrap.Modal(document.querySelector('#deleteModal'))
-    await fillModalForm(deleteModalForm, modal, id)
-    switch (deleteModalForm.roles.value) {
-        case '1':
-            deleteModalForm.roles.value = 'ADMIN'
-            break
-        case '2':
-            deleteModalForm.roles.value = 'USER'
-            break
-    }
 }
 
 
@@ -156,6 +157,7 @@ function addUser() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                id: newUserForm.id.value,
                 roles: newUserRoles,
                 firstName: newUserForm.firstName.value,
                 lastName: newUserForm.lastName.value,
