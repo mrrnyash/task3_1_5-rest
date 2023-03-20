@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  mysql:
+    image: 'mysql:8'
+    container_name: 'java-mysql'
+    expose:
+      - '3307'
+    environment:
+      - 'MYSQL_ROOT_PASSWORD=root'
+      - 'MYSQL_DATABASE=spring_rest_db'
+      - 'MYSQL_ROOT_HOST=%'
+      - 'MYSQL_ROOT_USER=root'
+
+  app:
+    build: ..
+    container_name: 'java-app'
+    links:
+      - 'mysql'
+    ports:
+      - '8080:8080'
