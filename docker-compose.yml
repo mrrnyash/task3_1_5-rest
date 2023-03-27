@@ -1,25 +1,27 @@
 version: '3'
 
 services:
-  db:
-    image: mysql:latest
-    container_name: mysql_db
-    expose:
-      - "3306"
-    environment:
-      - MYSQL_ROOT_USER=root
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=spring_rest_db
 
   app:
+    container_name: spring-app
+    image: app
+    restart: always # recommended way (instead of depends_on)
     build: .
-    depends_on:
-      db:
-        condition: service_started
-    container_name: spring_rest_app
-    links:
-      - db
     ports:
       - "8080:8080"
+    environment:
+      MYSQL_HOST: mysqldb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_PORT: 3306
+
+  mysqldb:
+    container_name: mysqldb
+    image: mysql:latest
+    ports:
+      - "3307:3306" # external:internal
+    environment:
+      MYSQL_DATABASE: spring_rest_db
+      MYSQL_ROOT_PASSWORD: root
 
 
